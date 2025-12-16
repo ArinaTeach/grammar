@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Irregular Verbs – 4 Forms Trainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #dbeafe 0, #bfdbfe 35%, #93c5fd 75%, #60a5fa 100%);
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 920px;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.7);
+      padding: 20px 20px 24px;
+      position: relative;
+      overflow: hidden;
+      color: #e5e7eb;
+    }
+
+    .app::before,
+    .app::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.22;
+      filter: blur(4px);
+      z-index: -1;
+    }
+
+    .app::before {
+      width: 240px;
+      height: 240px;
+      background: #38bdf8;
+      top: -80px;
+      right: -50px;
+    }
+
+    .app::after {
+      width: 260px;
+      height: 260px;
+      background: #6366f1;
+      bottom: -110px;
+      left: -70px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+      font-weight: 800;
+      color: #e0f2fe;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    h1 span.emoji {
+      font-size: 1.7rem;
+    }
+
+    .badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #ecfdf5;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 16px rgba(34, 197, 94, 0.55);
+      white-space: nowrap;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #ecfdf5;
+    }
+
+    main {
+      margin-top: 4px;
+    }
+
+    .game-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .left-top {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .mode-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #bfdbfe;
+    }
+
+    .mode-pill {
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      background: rgba(37, 99, 235, 0.3);
+      color: #e0f2fe;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 7px 14px;
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease, background 0.16s ease, color 0.16s ease;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: rgba(15, 23, 42, 0.7);
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: #f9fafb;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.7);
+    }
+
+    .btn.nav {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+      filter: brightness(0.97);
+    }
+
+    .stats-bar {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: #cbd5f5;
+    }
+
+    .stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+    }
+
+    .stats span.count-chip {
+      background: rgba(37, 99, 235, 0.35);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: #e0f2fe;
+    }
+
+    .stats span.dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #9ca3af;
+    }
+
+    .cards-area {
+      margin-top: 8px;
+      background: radial-gradient(circle at top left, #1e293b, #020617 55%);
+      border-radius: 20px;
+      padding: 18px 14px 16px;
+      position: relative;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .cards-area.shuffling {
+      animation: wobble 0.35s ease;
+    }
+
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+      gap: 10px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 720px) {
+      .tiles-grid {
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
+      }
+    }
+
+    .verb-tile {
+      position: relative;
+      border-radius: 18px;
+      padding: 12px 10px 14px;
+      background: radial-gradient(circle at top left, #1d4ed8, #0f172a);
+      color: #e5e7eb;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+      text-align: center;
+      height: 110px;
+    }
+
+    .verb-tile:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.95);
+    }
+
+    .verb-tile-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .verb-tile-word {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    /* когда закрыто — слово просто невидимо, без вопросительного знака */
+    .verb-tile.hidden .verb-tile-word span {
+      opacity: 0;
+    }
+
+    .verb-tile.ru {
+      background: radial-gradient(circle at top left, #0ea5e9, #0f172a);
+    }
+
+    .verb-tile.v1 {
+      background: radial-gradient(circle at top left, #3b82f6, #1e293b);
+    }
+
+    .verb-tile.v2 {
+      background: radial-gradient(circle at top left, #22c55e, #064e3b);
+    }
+
+    .verb-tile.v3 {
+      background: radial-gradient(circle at top left, #a855f7, #312e81);
+    }
+
+    .verb-tile.learned {
+      opacity: 0.6;
+      box-shadow: none;
+    }
+
+    .center-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .learn-btn {
+      border-radius: 999px;
+      border: none;
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      background: rgba(15, 23, 42, 0.9);
+      color: #4ade80;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.9);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease;
+    }
+
+    .learn-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(22, 163, 74, 0.9);
+      color: #bbf7d0;
+    }
+
+    .learn-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    .learn-btn.learned {
+      background: rgba(5, 46, 22, 0.9);
+      color: #bbf7d0;
+    }
+
+    .carousel-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .index-indicator {
+      font-size: 0.85rem;
+      color: #cbd5f5;
+    }
+
+    .index-indicator span.current {
+      font-weight: 700;
+      color: #e0f2fe;
+    }
+
+    @keyframes wobble {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      100% { transform: translateX(0); }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-row {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .cards-area {
+        padding-inline: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app" aria-label="Тренажёр неправильных глаголов: 4 формы">
+    <header>
+      <div class="title-block">
+        <h1><span class="emoji">🔁</span> Irregular Verbs</h1>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Неправильные глаголы</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="game-screen" aria-live="polite">
+        <div class="top-bar">
+          <div class="left-top">
+            <div class="mode-name">
+            Grammar Trainer
+              <span class="mode-pill">RU · V1 · V2 · V3</span>
+            </div>
+          </div>
+
+          <div class="btn-row">
+           
+            <button class="btn primary" id="shuffleBtn" type="button">
+              <span>Перемешать глаголы</span>
+              <span>🔀</span>
+            </button>
+          </div>
+        </div>
+
+       
+
+        <div class="cards-area" id="cardsArea">
+          <div class="tiles-grid">
+            <div class="verb-tile ru hidden" data-role="ru">
+              <div class="verb-tile-label">перевод</div>
+              <div class="verb-tile-word"><span id="wordRu"></span></div>
+            </div>
+            <div class="verb-tile v1 hidden" data-role="v1">
+              <div class="verb-tile-label">V1</div>
+              <div class="verb-tile-word"><span id="wordV1"></span></div>
+            </div>
+            <div class="verb-tile v2 hidden" data-role="v2">
+              <div class="verb-tile-label">V2</div>
+              <div class="verb-tile-word"><span id="wordV2"></span></div>
+            </div>
+            <div class="verb-tile v3 hidden" data-role="v3">
+              <div class="verb-tile-label">V3</div>
+              <div class="verb-tile-word"><span id="wordV3"></span></div>
+            </div>
+          </div>
+
+          
+
+          <div class="carousel-nav">
+            <button class="btn nav" id="prevBtn" type="button">⬅ Предыдущий</button>
+            <span class="index-indicator">
+              Глагол <span class="current" id="currentIndex">1</span> из <span id="totalIndex">1</span>
+            </span>
+            <button class="btn nav" id="nextBtn" type="button">Следующий ➡</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const VERBS = [
+  // базовый набор
+  { ru: "быть", v1: "be", v2: "was / were", v3: "been" },
+  { ru: "начинать", v1: "begin", v2: "began", v3: "begun" },
+  { ru: "покупать", v1: "buy", v2: "bought", v3: "bought" },
+  { ru: "приходить", v1: "come", v2: "came", v3: "come" },
+  { ru: "делать", v1: "do", v2: "did", v3: "done" },
+  { ru: "пить", v1: "drink", v2: "drank", v3: "drunk" },
+  { ru: "есть", v1: "eat", v2: "ate", v3: "eaten" },
+  { ru: "получать", v1: "get", v2: "got", v3: "got" },
+  { ru: "давать", v1: "give", v2: "gave", v3: "given" },
+  { ru: "идти, ходить", v1: "go", v2: "went", v3: "gone" },
+  { ru: "иметь", v1: "have", v2: "had", v3: "had" },
+  { ru: "уходить, покидать", v1: "leave", v2: "left", v3: "left" },
+  { ru: "делать, создавать", v1: "make", v2: "made", v3: "made" },
+  { ru: "бегать", v1: "run", v2: "ran", v3: "run" },
+  { ru: "говорить, сказать", v1: "say", v2: "said", v3: "said" },
+  { ru: "говорить, выступать", v1: "speak", v2: "spoke", v3: "spoken" },
+  { ru: "сидеть", v1: "sit", v2: "sat", v3: "sat" },
+  { ru: "брать", v1: "take", v2: "took", v3: "taken" },
+  { ru: "думать", v1: "think", v2: "thought", v3: "thought" },
+  { ru: "понимать", v1: "understand", v2: "understood", v3: "understood" },
+
+  // новые глаголы
+  { ru: "видеть", v1: "see", v2: "saw", v3: "seen" },
+  { ru: "писать", v1: "write", v2: "wrote", v3: "written" },
+  { ru: "ездить верхом", v1: "ride", v2: "rode", v3: "ridden" },
+  { ru: "учить,учиться", v1: "learn", v2: "learnt", v3: "learnt" },
+  { ru: "ломать", v1: "break", v2: "broke", v3: "broken" },
+  { ru: "строить", v1: "build", v2: "built", v3: "built" },
+  { ru: "ловить", v1: "catch", v2: "caught", v3: "caught" },
+  { ru: "находить", v1: "find", v2: "found", v3: "found" },
+  { ru: "летать", v1: "fly", v2: "flew", v3: "flown" },
+  { ru: "слышать", v1: "hear", v2: "heard", v3: "heard" },
+  { ru: "терять", v1: "lose", v2: "lost", v3: "lost" },
+  { ru: "держать, хранить", v1: "keep", v2: "kept", v3: "kept" },
+  { ru: "читать", v1: "read", v2: "read", v3: "read" },
+  { ru: "показывать", v1: "show", v2: "showed", v3: "shown" },
+  { ru: "петь", v1: "sing", v2: "sang", v3: "sung" },
+  { ru: "спать", v1: "sleep", v2: "slept", v3: "slept" },
+  { ru: "стоять", v1: "stand", v2: "stood", v3: "stood" },
+  { ru: "плавать", v1: "swim", v2: "swam", v3: "swum" },
+  { ru: "учить, обучать", v1: "teach", v2: "taught", v3: "taught" },    
+  { ru: "рассказывать", v1: "tell", v2: "told", v3: "told" },
+  { ru: "просыпаться", v1: "wake (up)", v2: "woke", v3: "woken" },
+  { ru: "носить (одежду)", v1: "wear", v2: "wore", v3: "worn" }
+];
+
+
+    const wordRu = document.getElementById("wordRu");
+    const wordV1 = document.getElementById("wordV1");
+    const wordV2 = document.getElementById("wordV2");
+    const wordV3 = document.getElementById("wordV3");
+
+    const tiles = document.querySelectorAll(".verb-tile");
+    
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    
+    const cardsArea = document.getElementById("cardsArea");
+   
+    
+    const currentIndexSpan = document.getElementById("currentIndex");
+    const totalIndexSpan = document.getElementById("totalIndex");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let order = [...VERBS.keys()];
+    let currentPos = 0;
+    let learnedSet = new Set();
+
+    function shuffleArray(arr) {
+      const result = [...arr];
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+      return result;
+    }
+
+    function updateStats() {
+  currentIndexSpan.textContent = currentPos + 1;
+  totalIndexSpan.textContent = VERBS.length;
+}
+
+
+    function setTileHidden(tile, isHidden) {
+      tile.classList.toggle("hidden", isHidden);
+    }
+
+    function hideAllTiles() {
+      tiles.forEach(tile => setTileHidden(tile, true));
+    }
+
+    function renderVerb() {
+      const verbIndex = order[currentPos];
+      const data = VERBS[verbIndex];
+
+      wordRu.textContent = data.ru;
+      wordV1.textContent = data.v1;
+      wordV2.textContent = data.v2;
+      wordV3.textContent = data.v3;
+
+      hideAllTiles(); // по умолчанию всё закрыто
+
+      const isLearned = learnedSet.has(verbIndex);
+      tiles.forEach(tile => {
+        tile.classList.toggle("learned", isLearned);
+      });
+      
+
+      updateStats();
+    }
+
+    // клик по карточке — показать / скрыть слово
+    tiles.forEach(tile => {
+      tile.addEventListener("click", () => {
+        const isHidden = tile.classList.contains("hidden");
+        setTileHidden(tile, !isHidden);
+      });
+    });
+
+    
+
+    shuffleBtn.addEventListener("click", () => {
+      order = shuffleArray(order);
+      currentPos = 0;
+      cardsArea.classList.add("shuffling");
+      renderVerb();
+      setTimeout(() => cardsArea.classList.remove("shuffling"), 350);
+    });
+
+    
+
+    prevBtn.addEventListener("click", () => {
+      currentPos = (currentPos - 1 + VERBS.length) % VERBS.length;
+      renderVerb();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentPos = (currentPos + 1) % VERBS.length;
+      renderVerb();
+    });
+
+    // старт
+    order = shuffleArray(order);
+    renderVerb();
+  </script>
+</body>
+</html>
